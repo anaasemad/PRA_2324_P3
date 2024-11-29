@@ -11,31 +11,33 @@ class TableEntry {
         std::string key;
         V value;
 
-        TableEnty(std::string key, V value){
-            
+        TableEnty(std::string k, V val){
+            key = k;
+            value = val;
         }
-        TableEntry(std::string key){
-
+        TableEntry(std::string k){
+            key = k;
         }
         TableEntry(){
-
+            key="";
         }
         friend bool operator==(const TableEntry<V> &te1, const TableEntry<V> &te2){
+            if(te1.key == te2.key){
+                return true;
+            }
+            else return false;
+
+        }
+        friend bool operator!=(const TableEntry<V> &te1, const TableEntry<V> &te2){
+            if(te1.key == te2.key){
+                return false;
+            }
+            else return true;
 
         }
         friend std::ostream& operator<<(std::ostream &out, const TableEntry<V> &te){
-
-        }
-        void insert(std::string key, V value){
-
-        }
-        V search(std::string key){
-
-        }
-        V remove(std::string key){
-
-        }
-        int entries(){
+            out << te.key << "-> " << te.value;
+            return out;
 
         }
 };
