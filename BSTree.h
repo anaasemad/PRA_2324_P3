@@ -39,16 +39,42 @@ class BSTree {
             }
         }
         BSNode<T>* remove(BSNode<T>* n, T e){
-
+            if(n==nullptr)
+                return std::runtime_error("Elemento no encontrado");
+            if(n.elem<e)
+                n->right=remove(n->right,e);
+            if(n.elem>e)
+                n->left=remove(n->left,e);
+            else{
+                if(n->left!=nullptr && n->right!=nullptr){
+                    n.elem=max(n->left);
+                    n->left=remove_max(n->left);
+                }else
+                    n=(n->left!=nullptr)?n->left:n->right;
+            }
+            return n;
         }
         T max(BSNode<T>* n) const{
+            if(n==nullptr)
+                return std::runtime_error("No hay elementos");
+            if(n->right==nullptr)
+                return max(n->right);
+            else
+                return n.elem;
 
         }
         BSNode<T>* remove_max(BSNode<T>* n){
-
+            if(n->right==nullptr)
+                return n->left;
+            n->right=remove_max(n->right);
+            return n;
         }
         void delete_cascade(BSNode<T>* n){
-
+            if(n!=nullptr){
+                delete_cascade(n->left);
+                delete_cascade(n->right);
+                delete n;
+            }
         }
 
     public:
