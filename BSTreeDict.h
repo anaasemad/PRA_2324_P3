@@ -32,19 +32,18 @@ class BSTreeDict: public Dict<V> {
             tree.insert(TalbeEntry(key,value));
         }
         V search(std::string key){
-            TableEntry<T> aux= tree.search(key);
+            TableEntry<V> aux= tree.search(key);
             if(aux==nullptr)
                 return std::runtime_error("Elemento no encontrado");
             else
                 return aux;//aux.value?? tiene q devolver el valor o el nodo?
         }
         V remove(std::string key){
-            TableEntry<T> aux= tree.search(key);
-            ir(aux==nullptr)
+            TableEntry<V> aux= tree.search(key);
+            if(aux==nullptr)
                 return std::runtime_error("Elemento no encontrado");
             else
                 return tree.remove(aux);
- 
 
         }
         int entries(){
