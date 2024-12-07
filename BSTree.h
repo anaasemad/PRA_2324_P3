@@ -12,10 +12,10 @@ class BSTree {
         BSNode<T> *root;//raiz de ABB
         BSNode<T>* search(BSNode<T>* n, T e) const{
             if(n==nullptr)
-                return std::runtime_error("Elemento no encontrado");
-            if(n.elem<e)
+                throw std::runtime_error("Elemento no encontrado");
+            if(n->elem<e)
                 return search(n->right,e);
-            if(n.elem>e)
+            if(n->elem>e)
                 return search(n->left,e);
             else
                 return n;
@@ -23,9 +23,9 @@ class BSTree {
         BSNode<T>* insert(BSNode<T>* n, T e){
             if(n==nullptr)
                 return new BSNode<T>(e);
-            if(n.elem==e)
-                return std::runtime_error("Ya existe");
-            if(n.elem<e)
+            if(n->elem==e)
+                throw std::runtime_error("Ya existe");
+            if(n->elem<e)
                 n->right=insert(n->right,e);
             else
                 n->left=insert(n->left,e);
@@ -40,14 +40,14 @@ class BSTree {
         }
         BSNode<T>* remove(BSNode<T>* n, T e){
             if(n==nullptr)
-                return std::runtime_error("Elemento no encontrado");
-            if(n.elem<e)
+                throw std::runtime_error("Elemento no encontrado");
+            if(n->elem<e)
                 n->right=remove(n->right,e);
-            if(n.elem>e)
+            if(n->elem>e)
                 n->left=remove(n->left,e);
             else{
                 if(n->left!=nullptr && n->right!=nullptr){
-                    n.elem=max(n->left);
+                    n->elem=max(n->left);
                     n->left=remove_max(n->left);
                 }else
                     n=(n->left!=nullptr)?n->left:n->right;
@@ -56,11 +56,11 @@ class BSTree {
         }
         T max(BSNode<T>* n) const{
             if(n==nullptr)
-                return std::runtime_error("No hay elementos");
+                throw std::runtime_error("No hay elementos");
             if(n->right==nullptr)
                 return max(n->right);
             else
-                return n.elem;
+                return n->elem;
 
         }
         BSNode<T>* remove_max(BSNode<T>* n){
@@ -89,9 +89,12 @@ class BSTree {
             return search(root,e).elem;
 
         }
-        T operator[](T e) const{
-            return search(e);
-        }
+        T operator[](T e) const {
+		BSNode<T>* node = search(root, e);
+    		if (node == nullptr)
+        	throw std::runtime_error("Elemento no encontrado");
+    		return node->elem;
+	}
         void insert(T e){
             insert(root,e);
         }
