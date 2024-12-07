@@ -86,7 +86,7 @@ class BSTree {
             return nelem;
         }
         T search(T e) const{
-            return search(root,e).elem;
+            return search(root,e)->elem;
 
         }
         T operator[](T e) const {
