@@ -12,7 +12,7 @@ class BSTree {
         BSNode<T> *root;//raiz de ABB
         BSNode<T>* search(BSNode<T>* n, T e) const{
             if(n==nullptr)
-                throw std::runtime_error("Elemento no encontrado");
+                throw std::runtime_error("Elemento no encontrado1");
             if(n->elem<e)
                 return search(n->right,e);
             if(n->elem>e)
@@ -40,7 +40,7 @@ class BSTree {
         }
         BSNode<T>* remove(BSNode<T>* n, T e){
             if(n==nullptr)
-                throw std::runtime_error("Elemento no encontrado");
+                throw std::runtime_error("Elemento no encontrado2");
             if(n->elem<e)
                 n->right=remove(n->right,e);
             if(n->elem>e)
@@ -57,7 +57,7 @@ class BSTree {
         T max(BSNode<T>* n) const{
             if(n==nullptr)
                 throw std::runtime_error("No hay elementos");
-            if(n->right==nullptr)
+            if(n->right!=nullptr)
                 return max(n->right);
             else
                 return n->elem;
@@ -89,21 +89,21 @@ class BSTree {
             return search(root,e)->elem;
 
         }
-        T operator[](T e) const {
+        T operator[](T e) const {//revisar (return search(e); como posible alternativa
 		BSNode<T>* node = search(root, e);
     		if (node == nullptr)
-        	throw std::runtime_error("Elemento no encontrado");
+        	throw std::runtime_error("Elemento no encontrado3");
     		return node->elem;
 	}
         void insert(T e){
-            insert(root,e);
+            root=insert(root,e);
         }
         friend std::ostream& operator<<(std::ostream &out, const BSTree<T> &bst){
-            print_inorder(out, bst.root);
+            bst.print_inorder(out, bst.root);
             return out;
         }
         void remove(T e){
-            remove(root,e);
+            root=remove(root,e);
         }
         ~BSTree(){
             delete_cascade(root);
