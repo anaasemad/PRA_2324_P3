@@ -17,13 +17,13 @@ class HashTable: public Dict<V> {
         int n;
         int max;
         ListLinked<TableEntry<V>>* table;
-        int h(std::string key){
+        int h(const std::string key){
             int sum=0;
             char c;
             for(int i=0;i<key.size();i++){
                 sum+=(int)key[i];
             }
-            return sum%n; 
+            return sum%max; 
         }
 
     public:
@@ -36,11 +36,11 @@ class HashTable: public Dict<V> {
             delete[] table;
         }
         int capacity(){
-            return n;
+            return max;
         }
         friend std::ostream& operator<<(std::ostream &out, const HashTable<V> &th){
             for(int i=0;i<th.max;i++){
-                out << th.table[i] << "\n";
+                out << th.table[i] << std::endl;
             }
             return out;
 
@@ -53,19 +53,19 @@ class HashTable: public Dict<V> {
 		int postable=table[pos].search(key);
                 return table[pos][postable].value;}
         }
-        void insert(std::string key, V value){
+        void insert(std::string key, V value) override{
             int pos=h(key);
             if(table[pos].search(key)!=-1)
                 throw std::runtime_error("Key ocupada");
-            if(n==max)
-                throw std::runtime_error("Tabla llena");
+            /*if(n==max)
+                throw std::runtime_error("Tabla llena");*/
             else{
                 TableEntry<V> nueva(key, value);
                 table[pos].insert(0, nueva);
                 n++;
             }
         }
-        V search(std::string key){
+        V search(std::string key) override {
             int pos=h(key);
 	    int postable=table[pos].search(key);
             if(postable!=-1)
@@ -73,7 +73,7 @@ class HashTable: public Dict<V> {
             else
                 throw std::runtime_error("Key no encontrada");
         }
-        V remove(std::string key){
+        V remove(std::string key) override {
             int pos=h(key);
 	    int postable=table[pos].search(key);
             if(postable!=-1){
@@ -85,7 +85,7 @@ class HashTable: public Dict<V> {
                 throw std::runtime_error("Key no encontrada");
 
         }
-        int entries(){
+        int entries() override {
             return capacity();
         }
 };
