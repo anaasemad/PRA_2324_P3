@@ -5,9 +5,11 @@
 #include <stdexcept>
 #include "Dict.h"
 #include "TableEntry.h"
-
-#include "C:\Users\anaas\Desktop\Ana\GIIROB\2º\Programación Avanzada\practicas\PRA_2425_P1\ListLinked.h" // ¡¡¡¡MODIFICAR!!!!
+#include <list>
+#include <memory>
+#include "../PRA_2425_P1/ListLinked2.h"
 //template < class T, class Alloc = allocator<T> > class list; //En el caso de que no funcione mi ListLinked.h
+//std::list<T>
 template <typename V>
 class HashTable: public Dict<V> {
 
@@ -19,8 +21,7 @@ class HashTable: public Dict<V> {
             int sum=0;
             char c;
             for(int i=0;i<key.size();i++){
-                c=at(key[i]);
-                sum+=(int)c;
+                sum+=(int)key[i];
             }
             return sum%n; 
         }
@@ -45,41 +46,43 @@ class HashTable: public Dict<V> {
 
         }
         V operator[](std::string key){
-            if(!key){
-                return std::runtime_error("Error en key");}
+            if(key==" "){
+                throw std::runtime_error("Error en key");}
             else{
                 int pos=h(key);
-                return table[pos].value;}
+		int postable=table[pos].search(key);
+                return table[pos][postable].value;}
         }
         void insert(std::string key, V value){
             int pos=h(key);
-            if(table[pos].valor!=NULL)
-                return std::runtime_error("Key ocupada");
+            if(table[pos].search(key)!=-1)
+                throw std::runtime_error("Key ocupada");
             if(n==max)
-                return std::runtime_error("Tabla llena");
+                throw std::runtime_error("Tabla llena");
             else{
-                table[pos].key=key;
-                table[pos].value=value;
+                TableEntry<V> nueva(key, value);
+                table[pos].insert(0, nueva);
                 n++;
             }
         }
         V search(std::string key){
             int pos=h(key);
-            if(table[pos].key==key)
-                return table[pos].value;
+	    int postable=table[pos].search(key);
+            if(postable!=-1)
+                return table[pos][postable].value;
             else
-                return std::runtime_error("Key no encontrada");
+                throw std::runtime_error("Key no encontrada");
         }
         V remove(std::string key){
             int pos=h(key);
-            if(table[pos].key==key){
-                V aux=table[pos].value;
-                table[pos].key="";
-                table[pos].value=NULL;
+	    int postable=table[pos].search(key);
+            if(postable!=-1){
+                V aux=table[pos][postable].value;
+                table[pos].remove(postable);
                 n--;
                 return aux;
             }else
-                return std::runtime_error("Key no encontrada");
+                throw std::runtime_error("Key no encontrada");
 
         }
         int entries(){
