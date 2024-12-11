@@ -1,4 +1,4 @@
-#ifndef BSTREEDICT_H
+#ifndef BSTREEDICT_
 #define BSTREEDICT_H
 
 #include <ostream>
@@ -20,10 +20,9 @@ class BSTreeDict: public Dict<V> {
         }
         ~BSTreeDict(){
             delete tree;
-            //delete [] tree;??
         }	
         friend std::ostream& operator<<(std::ostream &out, const BSTreeDict<V> &bs){
-            out<<bs.tree;
+            out<<*bs.tree;
             return out;
 
         }
@@ -34,19 +33,16 @@ class BSTreeDict: public Dict<V> {
             tree->insert(TableEntry<V>(key,value));
         }
         V search(std::string key) override {
-            BSNode<TableEntry<V>>  *aux= tree->search(key);
-            if(aux==nullptr)
-                throw std::runtime_error("Elemento no encontrado");
-            else
-                return aux->elem.value;//aux.value?? tiene q devolver el valor o el nodo?
+		TableEntry<V> aux1(key);
+		TableEntry<V> aux2=tree->search(aux1);
+			V resp=aux2.value;
+			return resp;
         }
         V remove(std::string key) override{
-            TableEntry<V>* aux= tree->search(root, TableEntry<V>(key,V());
-            if(aux==nullptr)
-                throw std::runtime_error("Elemento no encontrado");
-            else
-                return tree->remove(*aux);
-
+		TableEntry<V> aux(key);
+		V resp=search(key);
+		tree->remove(aux);
+		return resp;
         }
         int entries() override {
             return tree->size();
