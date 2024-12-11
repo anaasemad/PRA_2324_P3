@@ -11,7 +11,7 @@ class TableEntry {
         std::string key;
         V value;
 
-        TableEnty(std::string k, V val){
+        TableEntry(std::string k, V val){
             key = k;
             value = val;
         }
@@ -40,7 +40,7 @@ class TableEntry {
             return out;
 
         }
-        friend bool operator<(const TableEntry<V> &te1, const TableEntry<v> &te2){
+        friend bool operator<(const TableEntry<V> &te1, const TableEntry<V> &te2){
             if(te1.key < te2.key)
                 return true;
             return false;
