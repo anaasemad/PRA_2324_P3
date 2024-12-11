@@ -5,10 +5,11 @@
 #include <stdexcept>
 #include "BSNode.h"
 
+
 template <typename T> 
 class BSTree {
     private:
-        int nelem;//num elementos almacenados en ABB
+        int nelem=0;//num elementos almacenados en ABB
         BSNode<T> *root;//raiz de ABB
         BSNode<T>* search(BSNode<T>* n, T e) const{
             if(n==nullptr)
@@ -21,14 +22,17 @@ class BSTree {
                 return n;
         }
         BSNode<T>* insert(BSNode<T>* n, T e){
-            if(n==nullptr)
-                return new BSNode<T>(e);
+            if(n==nullptr){
+		nelem++;
+                return new BSNode<T>(e);}
             if(n->elem==e)
                 throw std::runtime_error("Ya existe");
-            if(n->elem<e)
+            if(n->elem<e){
                 n->right=insert(n->right,e);
-            else
+	    	}
+            else{
                 n->left=insert(n->left,e);
+	    	}
             return n;
         }
         void print_inorder(std::ostream &out, BSNode<T>* n) const{//revisar
@@ -41,16 +45,22 @@ class BSTree {
         BSNode<T>* remove(BSNode<T>* n, T e){
             if(n==nullptr)
                 throw std::runtime_error("Elemento no encontrado2");
-            if(n->elem<e)
+	    else if(n->elem<e){
                 n->right=remove(n->right,e);
-            if(n->elem>e)
+		}
+	    else if(n->elem>e){
                 n->left=remove(n->left,e);
+		}
+
             else{
                 if(n->left!=nullptr && n->right!=nullptr){
                     n->elem=max(n->left);
                     n->left=remove_max(n->left);
-                }else
+		    
+                }else{
                     n=(n->left!=nullptr)?n->left:n->right;
+		    nelem--;
+		}
             }
             return n;
         }
@@ -64,8 +74,9 @@ class BSTree {
 
         }
         BSNode<T>* remove_max(BSNode<T>* n){
-            if(n->right==nullptr)
-                return n->left;
+            if(n->right==nullptr){
+		nelem--;
+                return n->left;}
             n->right=remove_max(n->right);
             return n;
         }
